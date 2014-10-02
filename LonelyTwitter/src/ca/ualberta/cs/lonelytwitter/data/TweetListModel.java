@@ -1,9 +1,12 @@
 package ca.ualberta.cs.lonelytwitter.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ca.ualberta.cs.lonelytwitter.AbstractTweet;
+import ca.ualberta.cs.lonelytwitter.Tweet;
 
 public class TweetListModel {
 
@@ -25,7 +28,10 @@ public class TweetListModel {
 	 */
 	public void addTweet(AbstractTweet tweet) {
 		// TODO: Add only when it is not a duplicate
-		tweets.add(tweet);
+		if (!hasTweet(tweet))
+		{
+			tweets.add(tweet);
+		}
 	}
 
 	/**
@@ -35,7 +41,7 @@ public class TweetListModel {
 	 */
 	public int getCount() {
 		// TODO: return real count
-		return 0;
+		return tweets.size();
 	}
 
 	/**
@@ -47,6 +53,13 @@ public class TweetListModel {
 	 */
 	public boolean hasTweet(AbstractTweet tweet) {
 		// TODO: Find if the tweet already exists
+		for (AbstractTweet twt : tweets)
+		{
+			if ( twt.equals(tweet))
+			{
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -59,6 +72,13 @@ public class TweetListModel {
 	 */
 	public void removeTweet(AbstractTweet tweet) {
 		// TODO: Remove tweet
+		for (AbstractTweet twt : tweets)
+		{
+			if (twt.equals(tweet))
+			{
+				tweets.remove(twt);
+			}
+		}
 	}
 
 	/**
@@ -69,7 +89,17 @@ public class TweetListModel {
 	 */
 	public AbstractTweet[] getTweets() {
 		// TODO: return sorted list of tweets
-		return null;
+		
+		Collections.sort(tweets, new TweetDateComparator());
+		return tweets.toArray(new AbstractTweet[0]);
+	}
+	
+	public class TweetDateComparator implements Comparator<AbstractTweet>
+	{
+		public int compare(AbstractTweet left, AbstractTweet right)
+		{
+			return left.getTweetDate().compareTo(right.getTweetDate());
+		}
 	}
 
 	/**
